@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours de Français — Topic 1: Identité & Expression</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0a0f0a; color: #f0ece4; font-family: 'Source Sans 3', sans-serif; }
+  #root { min-height: 100vh; }
+  button { cursor: pointer; font-family: 'Source Sans 3', sans-serif; }
+  textarea { font-family: 'Source Sans 3', sans-serif; resize: vertical; }
+  input { font-family: 'Source Sans 3', sans-serif; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const { useState } = React;
+
+const ACCENT = "#4caf7d";
+const ACCENT2 = "#f5a623";
+const ACCENT3 = "#e94560";
+const ACCENT4 = "#7ec8e3";
+
+const syllabus = [
+  { num: 1, title: "Identity & Self-Expression", sub: "Present tense, connectors, adjectives", active: true },
+  { num: 2, title: "Past & Memory", sub: "Passé composé vs Imparfait", active: false },
+  { num: 3, title: "Poetry & Emotional Expression", sub: "", active: false },
+  { num: 4, title: "Society & Opinions", sub: "Introduction to Subjunctive", active: false },
+  { num: 5, title: "Travel & Francophone Culture", sub: "Future tense", active: false },
+  { num: 6, title: "Media & Technology", sub: "Relative pronouns", active: false },
+  { num: 7, title: "Literature & Advanced Expression", sub: "", active: false },
+  { num: 8, title: "Fluency & Final Speaking Assessment", sub: "", active: false },
+];
+
+const vocab1 = [
+  { fr: "la personnalité", en: "personality" },
+  { fr: "les qualités", en: "strengths / virtues" },
+  { fr: "les défauts", en: "weaknesses" },
+  { fr: "confiant(e)", en: "confident" },
+  { fr: "timide", en: "shy" },
+  { fr: "ambitieux / ambitieuse", en: "ambitious" },
+  { fr: "travailleur / travailleuse", en: "hardworking" },
+  { fr: "organisé(e)", en: "organized" },
+  { fr: "créatif / créative", en: "creative" },
+  { fr: "motivé(e)", en: "motivated" },
+  { fr: "sensible", en: "sensitive" },
+  { fr: "indépendant(e)", en: "independent" },
+  { fr: "la routine", en: "routine" },
+  { fr: "les objectifs", en: "goals" },
+  { fr: "réussir", en: "to succeed" },
+  { fr: "atteindre", en: "to achieve" },
+  { fr: "améliorer", en: "to improve" },
+  { fr: "développer", en: "to develop" },
+  { fr: "cependant", en: "however" },
+  { fr: "pourtant", en: "yet / nevertheless" },
+  { fr: "donc", en: "therefore" },
+  { fr: "mais", en: "but" },
+];
+
+const vocab2 = [
+  { fr: "épanouie", en: "fulfilled / blossoming" },
+  { fr: "ambitieuse", en: "ambitious (fem.)" },
+  { fr: "déterminée", en: "determined" },
+  { fr: "réservée", en: "reserved / quiet" },
+  { fr: "sensible", en: "sensitive" },
+  { fr: "exigeante", en: "demanding / high standards" },
+  { fr: "évoluer", en: "to grow / to evolve" },
+  { fr: "s'améliorer", en: "to improve oneself" },
+  { fr: "avoir confiance en soi", en: "to be self-confident" },
+  { fr: "prendre des décisions", en: "to make decisions" },
+];
+
+const verbGroups = [
+  {
+    group: "1er Groupe — ER", color: ACCENT,
+    rule: "e · es · e · ons · ez · ent",
+    model: { verb: "appeler", forms: ["j'appelle","tu appelles","il/elle appelle","nous appelons","vous appelez","ils/elles appellent"] },
+    exercise: ["aimer", "créer"],
+    tip: "Almost all -ER verbs follow this pattern. It's the most common group in French!"
+  },
+  {
+    group: "2ème Groupe — IR", color: ACCENT2,
+    rule: "is · is · it · issons · issez · issent",
+    model: { verb: "finir", forms: ["je finis","tu finis","il/elle finit","nous finissons","vous finissez","ils/elles finissent"] },
+    exercise: ["haïr"],
+    tip: "These -IR verbs add -iss- in the plural forms. Regular and predictable!"
+  },
+  {
+    group: "3ème Groupe — Irréguliers", color: ACCENT3,
+    rule: "Irregular — must be memorized!",
+    models: [
+      { verb: "venir", forms: ["je viens","tu viens","il/elle vient","nous venons","vous venez","ils/elles viennent"] },
+      { verb: "aller", forms: ["je vais","tu vas","il/elle va","nous allons","vous allez","ils/elles vont"] },
+      { verb: "faire", forms: ["je fais","tu fais","il/elle fait","nous faisons","vous faites","ils/elles font"] },
+      { verb: "prendre", forms: ["je prends","tu prends","il/elle prend","nous prenons","vous prenez","ils/elles prennent"] },
+    ],
+    tip: "Le radical ne change pas avec nous et vous. Ex: venir → je viens / nous venons"
+  },
+];
+
+const pronouns = ["je / j'", "tu", "il / elle", "nous", "vous", "ils / elles"];
+
+const matchAnswers = {
+  "la personnalité": "personality",
+  "les qualités": "strengths / virtues",
+  "confiant(e)": "confident",
+  "timide": "shy",
+  "motivé(e)": "motivated",
+  "indépendant(e)": "independent",
+  "la routine": "routine",
+  "réussir": "to succeed",
+};
+
+const fillBlanks = [
+  { sentence: "Je suis très ______ quand je parle français.", answer: "TIMIDE", options: ["CONFIANTE","TIMIDE","ROUTINE","ATTEINDRE"], note: "Hmm — she's nervous speaking French, not confident yet!" },
+  { sentence: "Je veux ______ mes objectifs cette année.", answer: "ATTEINDRE", options: ["CONFIANTE","TIMIDE","ROUTINE","ATTEINDRE"], note: "To 'achieve' goals = atteindre" },
+  { sentence: "Ma ______ change quand je me couche tard.", answer: "ROUTINE", options: ["CONFIANTE","TIMIDE","ROUTINE","ATTEINDRE"], note: "Daily routine = la routine" },
+  { sentence: "Elle est ______ et n'a pas peur de parler en public.", answer: "CONFIANTE", options: ["CONFIANTE","TIMIDE","ROUTINE","ATTEINDRE"], note: "Not afraid to speak = confident!" },
+];
+
+const reformulationModel = {
+  simple: "Je suis timide.",
+  rich: "Je suis réservée, mais je prends confiance en moi progressivement.",
+};
+
+const reformulationEx = [
+  { simple: "Je suis stressée.", hint: "Use: cependant / donc + a verb from groupe 3" },
+  { simple: "Je veux réussir.", hint: "Use: donc / parce que + detail about your goals" },
+  { simple: "Je suis indépendante.", hint: "Use: mais / pourtant + how you still need others sometimes" },
+];
+
+const restructureEx = [
+  { jumbled: "très est pour indépendante son elle âge.", answer: "Elle est très indépendante pour son âge." },
+  { jumbled: "Ambitieuse même si environnement modeste je d'un déterminée viens je et reste.", answer: "Je viens d'un environnement modeste, mais je reste ambitieuse et déterminée." },
+  { jumbled: "Je beaucoup veux d'efforts fais je évoluer donc.", answer: "Je veux évoluer, donc je fais beaucoup d'efforts." },
+];
+
+// ─── COMPONENTS ───────────────────────────────────────────────
+
+function VocabFlashcards({ words, color }) {
+  const [flipped, setFlipped] = useState({});
+  const [showAll, setShowAll] = useState(false);
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "0.75rem" }}>
+        <button onClick={() => setShowAll(p => !p)} style={{ background: `${color}22`, border: `1px solid ${color}66`, color, borderRadius: "20px", padding: "0.3rem 0.9rem", fontSize: "0.8rem" }}>
+          {showAll ? "Hide all translations" : "Show all translations"}
+        </button>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px,1fr))", gap: "0.65rem" }}>
+        {words.map((w, i) => (
+          <div key={i} onClick={() => setFlipped(p => ({ ...p, [i]: !p[i] }))}
+            style={{ background: (flipped[i] || showAll) ? `${color}18` : "rgba(255,255,255,0.04)", border: `1px solid ${(flipped[i] || showAll) ? color : "#2a2a2a"}`, borderRadius: "10px", padding: "0.9rem", cursor: "pointer", transition: "all 0.2s", minHeight: "60px" }}>
+            <div style={{ fontWeight: 700, color, fontSize: "0.95rem" }}>{w.fr}</div>
+            {(flipped[i] || showAll) && <div style={{ color: "#ccc", fontSize: "0.82rem", marginTop: "0.25rem", fontStyle: "italic" }}>{w.en}</div>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function VerbTable({ verb, forms, color }) {
+  return (
+    <div style={{ background: "rgba(0,0,0,0.3)", borderRadius: "10px", overflow: "hidden", border: `1px solid ${color}44` }}>
+      <div style={{ background: `${color}22`, padding: "0.6rem 1rem", borderBottom: `1px solid ${color}33` }}>
+        <span style={{ color, fontWeight: 700, fontSize: "1rem" }}>{verb}</span>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+        {forms.map((f, i) => (
+          <div key={i} style={{ padding: "0.5rem 1rem", borderBottom: i < forms.length - 2 ? "1px solid #1a1a1a" : "none", borderRight: i % 2 === 0 ? "1px solid #1a1a1a" : "none" }}>
+            <span style={{ color: "#666", fontSize: "0.75rem", marginRight: "0.5rem" }}>{pronouns[i]}</span>
+            <span style={{ color: "#f0ece4", fontSize: "0.9rem" }}>{f}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function VerbSection() {
+  const [expanded, setExpanded] = useState({});
+  const [answers, setAnswers] = useState({});
+  return (
+    <div>
+      <h2 style={{ fontSize: "1.8rem", color: ACCENT3, fontFamily: "'Playfair Display', serif", marginBottom: "0.5rem" }}>📐 La Conjugaison — Présent</h2>
+      <p style={{ color: "#888", marginBottom: "2rem", fontStyle: "italic" }}>Click each group to expand conjugation tables and exercises</p>
+      {verbGroups.map((g, gi) => (
+        <div key={gi} style={{ marginBottom: "1rem" }}>
+          <div onClick={() => setExpanded(p => ({ ...p, [gi]: !p[gi] }))} style={{
+            background: expanded[gi] ? `${g.color}18` : "rgba(255,255,255,0.04)",
+            border: `1px solid ${expanded[gi] ? g.color : "#222"}`,
+            borderRadius: expanded[gi] ? "12px 12px 0 0" : "12px",
+            padding: "1.1rem 1.5rem", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "all 0.2s"
+          }}>
+            <div>
+              <div style={{ fontWeight: 700, color: g.color, fontSize: "1.05rem" }}>{g.group}</div>
+              <div style={{ color: "#888", fontSize: "0.85rem", marginTop: "0.2rem" }}>Terminaisons : <span style={{ color: g.color }}>{g.rule}</span></div>
+            </div>
+            <span style={{ color: g.color, fontSize: "1.2rem" }}>{expanded[gi] ? "▲" : "▼"}</span>
+          </div>
+          {expanded[gi] && (
+            <div style={{ border: `1px solid ${g.color}44`, borderTop: "none", borderRadius: "0 0 12px 12px", padding: "1.5rem", background: `${g.color}08` }}>
+              <div style={{ background: `${g.color}15`, border: `1px solid ${g.color}33`, borderRadius: "8px", padding: "0.75rem 1rem", marginBottom: "1.25rem", fontSize: "0.9rem", color: "#ccc" }}>
+                💡 <strong style={{ color: g.color }}>Tip:</strong> {g.tip}
+              </div>
+              {g.model && (
+                <div style={{ marginBottom: "1.5rem" }}>
+                  <p style={{ color: "#888", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.75rem" }}>Modèle</p>
+                  <VerbTable verb={g.model.verb} forms={g.model.forms} color={g.color} />
+                </div>
+              )}
+              {g.models && (
+                <div style={{ marginBottom: "1.5rem" }}>
+                  <p style={{ color: "#888", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.75rem" }}>Verbes modèles</p>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: "1rem" }}>
+                    {g.models.map((m, mi) => <VerbTable key={mi} verb={m.verb} forms={m.forms} color={g.color} />)}
+                  </div>
+                </div>
+              )}
+              {g.exercise && (
+                <div>
+                  <p style={{ color: "#888", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.75rem" }}>✏️ À toi — Conjugue ces verbes</p>
+                  {g.exercise.map((verb, vi) => (
+                    <div key={vi} style={{ marginBottom: "1rem" }}>
+                      <p style={{ color: g.color, fontWeight: 700, marginBottom: "0.5rem" }}>{verb}</p>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.4rem" }}>
+                        {pronouns.map((pr, pi) => (
+                          <div key={pi} style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "rgba(0,0,0,0.2)", borderRadius: "6px", padding: "0.4rem 0.75rem" }}>
+                            <span style={{ color: "#666", fontSize: "0.8rem", minWidth: "70px" }}>{pr}</span>
+                            <input
+                              value={answers[`${gi}-${vi}-${pi}`] || ""}
+                              onChange={e => setAnswers(p => ({ ...p, [`${gi}-${vi}-${pi}`]: e.target.value }))}
+                              placeholder="…"
+                              style={{ background: "transparent", border: "none", borderBottom: `1px solid ${g.color}44`, color: "#f0ece4", fontSize: "0.9rem", outline: "none", flex: 1, padding: "0.1rem 0.2rem" }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function MatchExercise() {
+  const words = Object.keys(matchAnswers);
+  const allAnswers = Object.values(matchAnswers);
+  const [shuffled] = useState(() => [...allAnswers].sort(() => Math.random() - 0.5));
+  const [selected, setSelected] = useState({});
+  const [checked, setChecked] = useState(false);
+
+  const handleSelect = (wordIdx, ans) => {
+    if (checked) return;
+    setSelected(p => ({ ...p, [wordIdx]: ans }));
+  };
+
+  const score = checked ? words.filter((w, i) => selected[i] === matchAnswers[w]).length : 0;
+
+  return (
+    <div>
+      <h3 style={{ color: ACCENT, marginBottom: "0.5rem" }}>A. Vocabulary Match</h3>
+      <p style={{ color: "#888", fontSize: "0.9rem", marginBottom: "1.25rem", fontStyle: "italic" }}>Match each French word with its English meaning by clicking an answer.</p>
+      <div style={{ display: "grid", gap: "0.75rem", marginBottom: "1.25rem" }}>
+        {words.map((word, wi) => (
+          <div key={wi} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid #222", borderRadius: "10px", padding: "0.75rem 1rem" }}>
+            <div style={{ fontWeight: 700, color: ACCENT, marginBottom: "0.5rem" }}>{word}</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+              {shuffled.map((ans, ai) => {
+                const isSelected = selected[wi] === ans;
+                const isCorrect = checked && isSelected && ans === matchAnswers[word];
+                const isWrong = checked && isSelected && ans !== matchAnswers[word];
+                const isMissed = checked && !isSelected && ans === matchAnswers[word];
+                return (
+                  <button key={ai} onClick={() => handleSelect(wi, ans)} style={{
+                    background: isCorrect ? "#4caf7d33" : isWrong ? "#e9456033" : isMissed ? "#f5a62333" : isSelected ? `${ACCENT}22` : "rgba(255,255,255,0.05)",
+                    border: `1px solid ${isCorrect ? "#4caf7d" : isWrong ? "#e94560" : isMissed ? "#f5a623" : isSelected ? ACCENT : "#333"}`,
+                    color: isCorrect ? "#4caf7d" : isWrong ? "#e94560" : isMissed ? "#f5a623" : isSelected ? ACCENT : "#aaa",
+                    borderRadius: "20px", padding: "0.25rem 0.65rem", fontSize: "0.82rem", transition: "all 0.15s"
+                  }}>{ans}</button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+        <button onClick={() => setChecked(true)} style={{ background: ACCENT, border: "none", color: "#fff", borderRadius: "8px", padding: "0.6rem 1.25rem", fontWeight: 600, fontSize: "0.9rem" }}>Check answers ✓</button>
+        <button onClick={() => { setChecked(false); setSelected({}); }} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid #333", color: "#aaa", borderRadius: "8px", padding: "0.6rem 1.25rem", fontSize: "0.9rem" }}>Reset</button>
+        {checked && <span style={{ color: score === words.length ? "#4caf7d" : "#f5a623", fontWeight: 700 }}>{score}/{words.length} correct!</span>}
+      </div>
+    </div>
+  );
+}
+
+function FillBlanks() {
+  const [answers, setAnswers] = useState({});
+  const [checked, setChecked] = useState(false);
+  const score = checked ? fillBlanks.filter((q, i) => answers[i] === q.answer).length : 0;
+  return (
+    <div>
+      <h3 style={{ color: ACCENT2, marginBottom: "0.5rem" }}>B. Fill in the Blank</h3>
+      <p style={{ color: "#888", fontSize: "0.9rem", marginBottom: "1.25rem", fontStyle: "italic" }}>Choose the correct word: <strong style={{ color: ACCENT2 }}>CONFIANTE · TIMIDE · ROUTINE · ATTEINDRE</strong></p>
+      <div style={{ display: "grid", gap: "0.75rem", marginBottom: "1.25rem" }}>
+        {fillBlanks.map((q, qi) => {
+          const chosen = answers[qi];
+          const isCorrect = checked && chosen === q.answer;
+          const isWrong = checked && chosen && chosen !== q.answer;
+          return (
+            <div key={qi} style={{ background: isCorrect ? "rgba(76,175,125,0.08)" : isWrong ? "rgba(233,69,96,0.08)" : "rgba(255,255,255,0.03)", border: `1px solid ${isCorrect ? "#4caf7d" : isWrong ? "#e94560" : "#222"}`, borderRadius: "10px", padding: "1rem 1.25rem" }}>
+              <p style={{ marginBottom: "0.75rem", lineHeight: 1.7, fontSize: "1rem" }}>
+                {q.sentence.split("______").map((part, pi) => (
+                  <span key={pi}>{part}{pi === 0 && <span style={{ color: chosen ? (isCorrect ? "#4caf7d" : isWrong ? "#e94560" : ACCENT2) : "#555", fontWeight: 700, borderBottom: `2px solid ${isCorrect ? "#4caf7d" : isWrong ? "#e94560" : ACCENT2}44`, padding: "0 0.25rem" }}>{chosen || "______"}</span>}</span>
+                ))}
+              </p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                {q.options.map((opt, oi) => (
+                  <button key={oi} onClick={() => !checked && setAnswers(p => ({ ...p, [qi]: opt }))} style={{
+                    background: answers[qi] === opt ? `${ACCENT2}22` : "rgba(255,255,255,0.05)",
+                    border: `1px solid ${answers[qi] === opt ? ACCENT2 : "#333"}`,
+                    color: answers[qi] === opt ? ACCENT2 : "#aaa",
+                    borderRadius: "20px", padding: "0.25rem 0.75rem", fontSize: "0.82rem", transition: "all 0.15s"
+                  }}>{opt}</button>
+                ))}
+              </div>
+              {checked && <p style={{ marginTop: "0.5rem", fontSize: "0.82rem", color: isCorrect ? "#4caf7d" : "#e94560", fontStyle: "italic" }}>{isCorrect ? "✓ Correct !" : `✗ Answer: ${q.answer} — ${q.note}`}</p>}
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+        <button onClick={() => setChecked(true)} style={{ background: ACCENT2, border: "none", color: "#fff", borderRadius: "8px", padding: "0.6rem 1.25rem", fontWeight: 600, fontSize: "0.9rem" }}>Check answers ✓</button>
+        <button onClick={() => { setChecked(false); setAnswers({}); }} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid #333", color: "#aaa", borderRadius: "8px", padding: "0.6rem 1.25rem", fontSize: "0.9rem" }}>Reset</button>
+        {checked && <span style={{ color: score === fillBlanks.length ? "#4caf7d" : "#f5a623", fontWeight: 700 }}>{score}/{fillBlanks.length} correct!</span>}
+      </div>
+    </div>
+  );
+}
+
+function VerbQuestions() {
+  const questions = [
+    "À quelle heure vous venez au cours ?",
+    "Vous prenez quoi au petit déjeuner ?",
+    "Vous faites du sport ?",
+    "Où allez-vous le week-end ?",
+  ];
+  const verbs = ["venir", "prendre", "faire", "aller"];
+  const [answers, setAnswers] = useState({});
+  return (
+    <div>
+      <h3 style={{ color: ACCENT3, marginBottom: "0.5rem" }}>C. Réponds avec une phrase complète</h3>
+      <p style={{ color: "#888", fontSize: "0.9rem", marginBottom: "1.25rem", fontStyle: "italic" }}>Answer each question in a full French sentence using the verb shown.</p>
+      <div style={{ display: "grid", gap: "1rem" }}>
+        {questions.map((q, qi) => (
+          <div key={qi} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid #222", borderRadius: "10px", padding: "1rem 1.25rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.65rem" }}>
+              <p style={{ fontWeight: 600, lineHeight: 1.5, color: "#f0ece4", flex: 1 }}>{q}</p>
+              <span style={{ background: `${ACCENT3}22`, border: `1px solid ${ACCENT3}55`, color: ACCENT3, borderRadius: "12px", padding: "0.2rem 0.6rem", fontSize: "0.75rem", marginLeft: "0.75rem", whiteSpace: "nowrap" }}>{verbs[qi]}</span>
+            </div>
+            <textarea
+              value={answers[qi] || ""}
+              onChange={e => setAnswers(p => ({ ...p, [qi]: e.target.value }))}
+              placeholder="Ta réponse ici…"
+              rows={2}
+              style={{ width: "100%", background: "rgba(0,0,0,0.3)", border: "1px solid #333", borderRadius: "6px", padding: "0.6rem 0.75rem", color: "#f0ece4", fontSize: "0.9rem", outline: "none" }}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function JeSuisExercise() {
+  const prompts = [
+    { count: 5, start: "Je suis…", color: ACCENT },
+    { count: 3, start: "Je veux…", color: ACCENT2 },
+    { count: 2, start: "Je peux…", color: ACCENT4 },
+  ];
+  const [answers, setAnswers] = useState({});
+  return (
+    <div>
+      <h3 style={{ color: ACCENT, marginBottom: "0.5rem" }}>D. Je suis… Je veux… Je peux…</h3>
+      <p style={{ color: "#888", fontSize: "0.9rem", marginBottom: "1.25rem", fontStyle: "italic" }}>Write the required number of sentences starting with each phrase.</p>
+      {prompts.map((p, pi) => (
+        <div key={pi} style={{ marginBottom: "1.5rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
+            <span style={{ background: `${p.color}22`, border: `1px solid ${p.color}55`, color: p.color, borderRadius: "20px", padding: "0.3rem 0.85rem", fontWeight: 700, fontSize: "0.9rem" }}>{p.start}</span>
+            <span style={{ color: "#666", fontSize: "0.85rem" }}>× {p.count} phrases</span>
+          </div>
+          {Array.from({ length: p.count }).map((_, ii) => (
+            <div key={ii} style={{ display: "flex", gap: "0.75rem", alignItems: "center", marginBottom: "0.4rem" }}>
+              <span style={{ color: p.color, minWidth: "20px", fontWeight: 700 }}>{ii + 1}.</span>
+              <span style={{ color: p.color, fontWeight: 600, minWidth: "80px", fontSize: "0.9rem" }}>{p.start}</span>
+              <input
+                value={answers[`${pi}-${ii}`] || ""}
+                onChange={e => setAnswers(prev => ({ ...prev, [`${pi}-${ii}`]: e.target.value }))}
+                placeholder="…"
+                style={{ flex: 1, background: "rgba(0,0,0,0.3)", border: "1px solid #333", borderRadius: "6px", padding: "0.5rem 0.75rem", color: "#f0ece4", fontSize: "0.9rem", outline: "none" }}
+              />
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ReformulationExercise() {
+  const [answers, setAnswers] = useState({});
+  return (
+    <div>
+      <h3 style={{ color: ACCENT2, marginBottom: "0.5rem" }}>E. Reformulation</h3>
+      <p style={{ color: "#888", fontSize: "0.9rem", marginBottom: "1rem", fontStyle: "italic" }}>Make each sentence richer. Use a connector and a Group 3 verb if possible.</p>
+      <div style={{ background: "rgba(76,175,125,0.08)", border: "1px solid rgba(76,175,125,0.3)", borderRadius: "10px", padding: "1rem 1.25rem", marginBottom: "1.5rem" }}>
+        <p style={{ color: "#888", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.5rem" }}>Modèle</p>
+        <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+          <span style={{ background: "#e9456022", border: "1px solid #e9456055", color: "#e94560", borderRadius: "8px", padding: "0.4rem 0.75rem", fontSize: "0.9rem" }}>{reformulationModel.simple}</span>
+          <span style={{ color: "#555" }}>→</span>
+          <span style={{ background: "#4caf7d22", border: "1px solid #4caf7d55", color: "#4caf7d", borderRadius: "8px", padding: "0.4rem 0.75rem", fontSize: "0.9rem" }}>{reformulationModel.rich}</span>
+        </div>
+      </div>
+      <div style={{ display: "grid", gap: "1rem" }}>
+        {reformulationEx.map((ex, ei) => (
+          <div key={ei} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid #222", borderRadius: "10px", padding: "1rem 1.25rem" }}>
+            <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start", marginBottom: "0.6rem" }}>
+              <span style={{ color: ACCENT2, fontWeight: 700, minWidth: "20px" }}>{ei + 1}.</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ background: "#e9456018", border: "1px solid #e9456044", borderRadius: "6px", padding: "0.45rem 0.75rem", display: "inline-block", marginBottom: "0.4rem" }}>
+                  <span style={{ color: "#e94560", fontSize: "0.95rem" }}>{ex.simple}</span>
+                </div>
+                <div style={{ fontSize: "0.8rem", color: "#666", fontStyle: "italic", marginBottom: "0.6rem" }}>💡 {ex.hint}</div>
+                <textarea
+                  value={answers[ei] || ""}
+                  onChange={e => setAnswers(p => ({ ...p, [ei]: e.target.value }))}
+                  placeholder="Ta reformulation ici…"
+                  rows={2}
+                  style={{ width: "100%", background: "rgba(0,0,0,0.3)", border: "1px solid #333", borderRadius: "6px", padding: "0.6rem 0.75rem", color: "#f0ece4", fontSize: "0.9rem", outline: "none" }}
+                />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RestructureExercise() {
+  const [answers, setAnswers] = useState({});
+  const [revealed, setRevealed] = useState({});
+  return (
+    <div>
+      <h3 style={{ color: ACCENT4, marginBottom: "0.5rem" }}>F. Restructure ces phrases</h3>
+      <p style={{ color: "#888", fontSize: "0.9rem", marginBottom: "1.25rem", fontStyle: "italic" }}>Put the words in the correct order to make a proper French sentence.</p>
+      <div style={{ display: "grid", gap: "1rem" }}>
+        {restructureEx.map((ex, ei) => (
+          <div key={ei} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid #222", borderRadius: "10px", padding: "1rem 1.25rem" }}>
+            <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
+              <span style={{ color: ACCENT4, fontWeight: 700, minWidth: "20px" }}>{ei + 1}.</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ background: "rgba(126,200,227,0.08)", border: "1px solid rgba(126,200,227,0.25)", borderRadius: "6px", padding: "0.5rem 0.75rem", marginBottom: "0.65rem", fontSize: "0.9rem", color: "#aaa", fontStyle: "italic" }}>
+                  {ex.jumbled}
+                </div>
+                <input
+                  value={answers[ei] || ""}
+                  onChange={e => setAnswers(p => ({ ...p, [ei]: e.target.value }))}
+                  placeholder="Ta réponse…"
+                  style={{ width: "100%", background: "rgba(0,0,0,0.3)", border: "1px solid #333", borderRadius: "6px", padding: "0.5rem 0.75rem", color: "#f0ece4", fontSize: "0.9rem", outline: "none", marginBottom: "0.5rem" }}
+                />
+                <div style={{ display: "flex", gap: "0.5rem" }}>
+                  <button onClick={() => setRevealed(p => ({ ...p, [ei]: !p[ei] }))} style={{ background: `${ACCENT4}18`, border: `1px solid ${ACCENT4}44`, color: ACCENT4, borderRadius: "20px", padding: "0.25rem 0.75rem", fontSize: "0.8rem" }}>
+                    {revealed[ei] ? "Hide answer" : "Show answer"}
+                  </button>
+                </div>
+                {revealed[ei] && (
+                  <div style={{ marginTop: "0.5rem", background: "rgba(76,175,125,0.1)", border: "1px solid rgba(76,175,125,0.3)", borderRadius: "6px", padding: "0.5rem 0.75rem", fontSize: "0.9rem", color: "#4caf7d" }}>
+                    ✓ {ex.answer}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HomeworkSection() {
+  const [answers, setAnswers] = useState({});
+  const speakingPrompts = [
+    "Décrivez votre personnalité.",
+    "Quelles sont trois qualités que vous avez ?",
+    "Y a-t-il des défauts que vous voudriez changer ?",
+    "Pourquoi apprenez-vous le français ?",
+  ];
+  return (
+    <div>
+      <h2 style={{ fontSize: "1.8rem", color: "#c77dff", fontFamily: "'Playfair Display', serif", marginBottom: "0.5rem" }}>🏠 Exercices à la maison</h2>
+      <p style={{ color: "#888", marginBottom: "2rem", fontStyle: "italic" }}>To prepare for the next class</p>
+
+      <div style={{ marginBottom: "2.5rem" }}>
+        <h3 style={{ color: "#c77dff", marginBottom: "0.5rem" }}>G. Speaking Prompts</h3>
+        <p style={{ color: "#888", fontSize: "0.9rem", marginBottom: "1.25rem", fontStyle: "italic" }}>Answer each question in 5–7 full French sentences. Write your answers below to practice.</p>
+        <div style={{ display: "grid", gap: "1rem" }}>
+          {speakingPrompts.map((q, qi) => (
+            <div key={qi} style={{ background: "rgba(199,125,255,0.06)", border: "1px solid rgba(199,125,255,0.2)", borderRadius: "10px", padding: "1rem 1.25rem" }}>
+              <p style={{ fontWeight: 600, marginBottom: "0.65rem", color: "#f0ece4" }}>{qi + 1}. {q}</p>
+              <textarea
+                value={answers[`sp-${qi}`] || ""}
+                onChange={e => setAnswers(p => ({ ...p, [`sp-${qi}`]: e.target.value }))}
+                placeholder="Écris ta réponse ici… (5–7 phrases)"
+                rows={4}
+                style={{ width: "100%", background: "rgba(0,0,0,0.3)", border: "1px solid #333", borderRadius: "6px", padding: "0.6rem 0.75rem", color: "#f0ece4", fontSize: "0.9rem", outline: "none" }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ background: "rgba(199,125,255,0.06)", border: "1px solid rgba(199,125,255,0.25)", borderRadius: "14px", padding: "1.5rem" }}>
+        <h3 style={{ color: "#c77dff", marginBottom: "0.5rem" }}>H. Réflexion — Dans deux semaines</h3>
+        <p style={{ color: "#ccc", lineHeight: 1.7, marginBottom: "0.75rem", fontSize: "0.95rem" }}>
+          Write a short paragraph (6–8 lines): <strong style={{ color: "#c77dff" }}>Qui suis-je aujourd'hui ?</strong> — C'est-à-dire ma personnalité, mes objectifs, mes passions et mes défis.
+        </p>
+        <div style={{ background: "rgba(0,0,0,0.2)", borderRadius: "8px", padding: "0.75rem 1rem", marginBottom: "1rem", fontSize: "0.85rem" }}>
+          <p style={{ color: "#888", marginBottom: "0.3rem" }}>✅ Use at least <strong style={{ color: "#c77dff" }}>5 vocabulary words</strong> from the Week 1 list</p>
+          <p style={{ color: "#888" }}>✅ Use at least <strong style={{ color: "#c77dff" }}>2 connectors</strong>: donc · cependant · pourtant · mais · parce que</p>
+        </div>
+        <textarea
+          value={answers["reflection"] || ""}
+          onChange={e => setAnswers(p => ({ ...p, reflection: e.target.value }))}
+          placeholder="Qui suis-je aujourd'hui…"
+          rows={8}
+          style={{ width: "100%", background: "rgba(0,0,0,0.3)", border: "1px solid #444", borderRadius: "6px", padding: "0.75rem 1rem", color: "#f0ece4", fontSize: "0.95rem", outline: "none", lineHeight: 1.8 }}
+        />
+      </div>
+    </div>
+  );
+}
+
+// ─── PAGES ────────────────────────────────────────────────────
+
+const pages = [
+  { id: "syllabus", emoji: "📚", label: "Syllabus" },
+  { id: "vocab", emoji: "📖", label: "Vocabulaire" },
+  { id: "grammar", emoji: "📐", label: "Grammaire" },
+  { id: "exercises", emoji: "✏️", label: "Exercices" },
+  { id: "homework", emoji: "🏠", label: "À la maison" },
+];
+
+function App() {
+  const [page, setPage] = useState("syllabus");
+
+  return (
+    <div style={{ fontFamily: "'Source Sans 3', sans-serif", background: "#0a0f0a", minHeight: "100vh", color: "#f0ece4" }}>
+
+      {/* HEADER */}
+      <div style={{ background: "linear-gradient(135deg,#0a1a0e,#0a0f0a 50%,#1a1a0a)", padding: "1.5rem 2rem", borderBottom: "1px solid #1a2a1a", position: "sticky", top: 0, zIndex: 100 }}>
+        <div style={{ maxWidth: 960, margin: "0 auto" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}>
+            <span style={{ fontSize: "2rem" }}>🇫🇷</span>
+            <div>
+              <h1 style={{ margin: 0, fontSize: "1.3rem", fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>Cours de Français</h1>
+              <p style={{ margin: 0, fontSize: "0.8rem", color: "#4caf7d", fontStyle: "italic" }}>Topic 1 · Identité & Expression personnelle</p>
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+            {pages.map(p => (
+              <button key={p.id} onClick={() => setPage(p.id)} style={{
+                background: page === p.id ? ACCENT : "rgba(255,255,255,0.05)",
+                border: `1px solid ${page === p.id ? ACCENT : "#2a3a2a"}`,
+                color: page === p.id ? "#fff" : "#aaa",
+                padding: "0.3rem 0.8rem", borderRadius: "20px", fontSize: "0.78rem", transition: "all 0.2s"
+              }}>{p.emoji} {p.label}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* CONTENT */}
+      <div style={{ maxWidth: 960, margin: "0 auto", padding: "2rem 1.5rem" }}>
+
+        {/* SYLLABUS */}
+        {page === "syllabus" && (
+          <div>
+            <h2 style={{ fontSize: "1.8rem", color: ACCENT, fontFamily: "'Playfair Display', serif", marginBottom: "0.5rem" }}>📚 Syllabus du cours</h2>
+            <p style={{ color: "#888", marginBottom: "2rem", fontStyle: "italic" }}>8 topics to take you from beginner-intermediate to fluency</p>
+            <div style={{ display: "grid", gap: "0.75rem", marginBottom: "2.5rem" }}>
+              {syllabus.map((t, i) => (
+                <div key={i} style={{ background: t.active ? "rgba(76,175,125,0.08)" : "rgba(255,255,255,0.03)", border: `1px solid ${t.active ? "#4caf7d" : "#1e2e1e"}`, borderRadius: "12px", padding: "1rem 1.5rem", display: "flex", gap: "1rem", alignItems: "center" }}>
+                  <div style={{ background: t.active ? ACCENT : "#1a2a1a", color: t.active ? "#fff" : "#555", borderRadius: "50%", width: "34px", height: "34px", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: "0.9rem", flexShrink: 0 }}>{t.num}</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: t.active ? 700 : 400, color: t.active ? "#f0ece4" : "#666", fontSize: "0.95rem" }}>{t.title}</div>
+                    {t.sub && <div style={{ color: t.active ? ACCENT : "#444", fontSize: "0.8rem", marginTop: "0.15rem" }}>{t.sub}</div>}
+                  </div>
+                  {t.active && <span style={{ background: "#4caf7d22", border: "1px solid #4caf7d55", color: "#4caf7d", borderRadius: "12px", padding: "0.2rem 0.65rem", fontSize: "0.75rem", whiteSpace: "nowrap" }}>← You are here</span>}
+                </div>
+              ))}
+            </div>
+            <div style={{ background: "rgba(76,175,125,0.08)", border: "1px solid rgba(76,175,125,0.3)", borderRadius: "14px", padding: "1.5rem" }}>
+              <h3 style={{ color: ACCENT, marginBottom: "1rem" }}>🎯 Topic 1 Objectives</h3>
+              {["Talk about yourself fluently", "Learn personality vocabulary", "Practice present tense + questions"].map((obj, i) => (
+                <div key={i} style={{ display: "flex", gap: "0.75rem", alignItems: "center", marginBottom: "0.5rem" }}>
+                  <span style={{ color: ACCENT }}>✦</span>
+                  <span style={{ color: "#ccc", fontSize: "0.95rem" }}>{obj}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* VOCAB */}
+        {page === "vocab" && (
+          <div>
+            <h2 style={{ fontSize: "1.8rem", color: ACCENT, fontFamily: "'Playfair Display', serif", marginBottom: "0.5rem" }}>📖 Vocabulaire</h2>
+            <p style={{ color: "#888", marginBottom: "2rem", fontStyle: "italic" }}>Click any card to reveal the English translation</p>
+
+            <div style={{ marginBottom: "2.5rem" }}>
+              <h3 style={{ color: ACCENT, marginBottom: "1rem", fontSize: "1rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Week 1 — Identité & Personnalité</h3>
+              <VocabFlashcards words={vocab1} color={ACCENT} />
+            </div>
+
+            <div style={{ marginBottom: "2.5rem" }}>
+              <h3 style={{ color: ACCENT2, marginBottom: "1rem", fontSize: "1rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Vocabulaire avancé — Pour s'exprimer mieux</h3>
+              <VocabFlashcards words={vocab2} color={ACCENT2} />
+            </div>
+
+            <div style={{ background: "rgba(245,166,35,0.08)", border: "1px solid rgba(245,166,35,0.3)", borderRadius: "14px", padding: "1.5rem" }}>
+              <h3 style={{ color: ACCENT2, marginBottom: "1rem" }}>🔗 Connecteurs — Connectors</h3>
+              <p style={{ color: "#888", fontSize: "0.85rem", marginBottom: "1rem", fontStyle: "italic" }}>Use these to link your ideas and sound more natural</p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: "0.65rem" }}>
+                {[
+                  { fr: "cependant", en: "however", ex: "Je suis timide, cependant je m'améliore." },
+                  { fr: "pourtant", en: "yet / nevertheless", ex: "C'est difficile, pourtant je continue." },
+                  { fr: "donc", en: "therefore / so", ex: "Je travaille dur, donc je réussis." },
+                  { fr: "mais", en: "but", ex: "Je suis ambitieuse mais réservée." },
+                  { fr: "parce que", en: "because", ex: "J'apprends le français parce que j'aime la culture." },
+                ].map((c, ci) => (
+                  <div key={ci} style={{ background: "rgba(0,0,0,0.3)", border: "1px solid #2a2a1a", borderRadius: "10px", padding: "0.85rem" }}>
+                    <div style={{ fontWeight: 700, color: ACCENT2, fontSize: "1rem" }}>{c.fr}</div>
+                    <div style={{ color: "#888", fontSize: "0.82rem", marginBottom: "0.4rem" }}>{c.en}</div>
+                    <div style={{ color: "#ccc", fontSize: "0.8rem", fontStyle: "italic", borderTop: "1px solid #222", paddingTop: "0.4rem" }}>{c.ex}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* GRAMMAR */}
+        {page === "grammar" && (
+          <div>
+            <div style={{ background: "rgba(76,175,125,0.06)", border: "1px solid rgba(76,175,125,0.2)", borderRadius: "12px", padding: "1rem 1.25rem", marginBottom: "2rem" }}>
+              <p style={{ color: "#ccc", lineHeight: 1.7, fontSize: "0.95rem" }}>
+                💡 <strong style={{ color: ACCENT }}>Rappel :</strong> Quand un adjectif ne s'accorde pas avec le genre/nombre, il est <strong style={{ color: ACCENT }}>invariable</strong>. Les adjectifs s'accordent normalement avec le <strong style={{ color: ACCENT }}>nom</strong> qu'ils décrivent.
+              </p>
+            </div>
+            <VerbSection />
+          </div>
+        )}
+
+        {/* EXERCISES */}
+        {page === "exercises" && (
+          <div>
+            <h2 style={{ fontSize: "1.8rem", color: ACCENT2, fontFamily: "'Playfair Display', serif", marginBottom: "0.5rem" }}>✏️ Exercices en classe</h2>
+            <p style={{ color: "#888", marginBottom: "2.5rem", fontStyle: "italic" }}>Interactive exercises — do these together or on your own</p>
+            <div style={{ display: "grid", gap: "2.5rem" }}>
+              <MatchExercise />
+              <div style={{ borderTop: "1px solid #1a2a1a" }} />
+              <FillBlanks />
+              <div style={{ borderTop: "1px solid #1a2a1a" }} />
+              <VerbQuestions />
+              <div style={{ borderTop: "1px solid #1a2a1a" }} />
+              <JeSuisExercise />
+              <div style={{ borderTop: "1px solid #1a2a1a" }} />
+              <ReformulationExercise />
+              <div style={{ borderTop: "1px solid #1a2a1a" }} />
+              <RestructureExercise />
+            </div>
+          </div>
+        )}
+
+        {/* HOMEWORK */}
+        {page === "homework" && <HomeworkSection />}
+
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(React.createElement(App), document.getElementById("root"));
+</script>
+</body>
+</html>

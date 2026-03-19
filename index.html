@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours de Français — Accueil</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #080b08;
+    color: #f0ece4;
+    font-family: 'Source Sans 3', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Subtle grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 5rem 2rem 3rem;
+    position: relative;
+  }
+
+  .flag {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    display: block;
+    filter: drop-shadow(0 0 30px rgba(76,175,125,0.4));
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .hero-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #4caf7d;
+    margin-bottom: 1rem;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, #f0ece4 30%, #4caf7d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: #888;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-name {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 3rem;
+  }
+
+  .hero-name span {
+    color: #4caf7d;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    max-width: 500px;
+    margin: 0 auto 4rem;
+    padding: 0 2rem;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+  }
+
+  .progress-label span:last-child { color: #4caf7d; }
+
+  .progress-bar {
+    height: 4px;
+    background: #1a1a1a;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 25%;
+    background: linear-gradient(90deg, #4caf7d, #7ec8e3);
+    border-radius: 2px;
+    position: relative;
+    animation: progressGrow 1.2s ease-out forwards;
+  }
+
+  @keyframes progressGrow {
+    from { width: 0; }
+    to { width: 25%; }
+  }
+
+  /* ── TOPIC CARDS ── */
+  .cards-section {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+    width: 100%;
+  }
+
+  .section-label {
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #444;
+    margin-bottom: 2rem;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .topic-card {
+    position: relative;
+    border-radius: 20px;
+    padding: 2rem;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid transparent;
+  }
+
+  .topic-card:hover {
+    transform: translateY(-6px);
+  }
+
+  .topic-card.available {
+    background: linear-gradient(145deg, #0e1a10, #0a140c);
+    border-color: #1e3a22;
+    box-shadow: 0 4px 30px rgba(76,175,125,0.08);
+  }
+
+  .topic-card.available:hover {
+    border-color: #4caf7d;
+    box-shadow: 0 16px 50px rgba(76,175,125,0.2);
+  }
+
+  .topic-card.available-2 {
+    background: linear-gradient(145deg, #1a0e1a, #14090e);
+    border-color: #2a1a2a;
+    box-shadow: 0 4px 30px rgba(233,69,96,0.06);
+  }
+
+  .topic-card.available-2:hover {
+    border-color: #e94560;
+    box-shadow: 0 16px 50px rgba(233,69,96,0.18);
+  }
+
+  .topic-card.locked {
+    background: linear-gradient(145deg, #0d0d0d, #0a0a0a);
+    border-color: #161616;
+    cursor: default;
+    opacity: 0.5;
+  }
+
+  /* Glow orb */
+  .card-glow {
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    filter: blur(50px);
+    opacity: 0.15;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .topic-card:hover .card-glow { opacity: 0.3; }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .card-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1;
+    opacity: 0.15;
+  }
+
+  .card-badge {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  .badge-done { background: rgba(76,175,125,0.15); color: #4caf7d; border: 1px solid rgba(76,175,125,0.3); }
+  .badge-new { background: rgba(233,69,96,0.15); color: #e94560; border: 1px solid rgba(233,69,96,0.3); animation: pulse-badge 2s ease-in-out infinite; }
+  .badge-locked { background: rgba(255,255,255,0.05); color: #444; border: 1px solid #222; }
+
+  @keyframes pulse-badge {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  .card-icon { font-size: 2.2rem; margin-bottom: 0.75rem; display: block; }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    line-height: 1.3;
+  }
+
+  .card-subtitle {
+    font-size: 0.82rem;
+    color: #666;
+    margin-bottom: 1.25rem;
+    font-style: italic;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .card-tag {
+    font-size: 0.72rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 10px;
+    border: 1px solid;
+  }
+
+  .card-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .cta-text {
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .cta-arrow {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: transform 0.2s;
+  }
+
+  .topic-card:hover .cta-arrow { transform: translateX(4px); }
+
+  /* ── COMING SOON STRIP ── */
+  .coming-soon {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 1.5rem 3rem;
+  }
+
+  .coming-soon-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .coming-soon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.6rem;
+  }
+
+  .soon-item {
+    background: #0d0d0d;
+    border: 1px solid #161616;
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    opacity: 0.4;
+  }
+
+  .soon-num { font-size: 0.7rem; color: #444; margin-bottom: 0.2rem; }
+  .soon-title { font-size: 0.82rem; color: #555; }
+  .soon-lock { font-size: 0.7rem; color: #333; margin-top: 0.2rem; }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.78rem;
+    color: #333;
+    border-top: 1px solid #111;
+  }
+
+  .footer span { color: #4caf7d; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .hero { padding: 3.5rem 1.25rem 2rem; }
+    .cards-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <span class="flag">🇫🇷</span>
+    <p class="hero-eyebrow">Bienvenue dans ton espace d'apprentissage</p>
+    <h1 class="hero-title">Cours de Français</h1>
+    <p class="hero-sub">Beginner–Intermediate · Personal programme</p>
+    <p class="hero-name">Taught by <span>Fily</span> · via Superprof</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Progression du cours</span>
+      <span>2 / 8 topics</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- ACTIVE TOPIC CARDS -->
+  <div class="cards-section">
+    <p class="section-label">Cours disponibles — clique pour commencer</p>
+    <div class="cards-grid">
+
+      <!-- TOPIC 1 -->
+      <a href="french_lesson_topic1.html" class="topic-card available">
+        <div class="card-glow" style="background:#4caf7d;"></div>
+        <div class="card-top">
+          <span class="card-num" style="color:#4caf7d;">01</span>
+          <span class="card-badge badge-done">✓ Complété</span>
+        </div>
+        <span class="card-icon">🪞</span>
+        <h2 class="card-title">Identité &<br>Expression personnelle</h2>
+        <p class="card-subtitle">Identity & Self-Expression</p>
+        <div class="card-tags">
+          <span class="card-tag" style="color:#4caf7d;border-color:rgba(76,175,125,0.3);background:rgba(76,175,125,0.08);">Présent</span>
+          <span class="card-tag" style="color:#4caf7d;border-color:rgba(76,175,125,0.3);background:rgba(76,175,125,0.08);">Adjectifs</span>
+          <span class="card-tag" style="color:#4caf7d;border-color:rgba(76,175,125,0.3);background:rgba(76,175,125,0.08);">Connecteurs</span>
+          <span class="card-tag" style="color:#4caf7d;border-color:rgba(76,175,125,0.3);background:rgba(76,175,125,0.08);">Vocabulaire</span>
+        </div>
+        <div class="card-cta">
+          <span class="cta-text" style="color:#4caf7d;">Revoir le cours →</span>
+          <div class="cta-arrow" style="background:rgba(76,175,125,0.15);color:#4caf7d;">→</div>
+        </div>
+      </a>
+
+      <!-- TOPIC 2 -->
+      <a href="french_lesson_topic2.html" class="topic-card available-2">
+        <div class="card-glow" style="background:#e94560;"></div>
+        <div class="card-top">
+          <span class="card-num" style="color:#e94560;">02</span>
+          <span class="card-badge badge-new">✦ Nouveau</span>
+        </div>
+        <span class="card-icon">💬</span>
+        <h2 class="card-title">La Conversation<br>Naturelle</h2>
+        <p class="card-subtitle">Keeping a conversation going</p>
+        <div class="card-tags">
+          <span class="card-tag" style="color:#e94560;border-color:rgba(233,69,96,0.3);background:rgba(233,69,96,0.08);">Fillers</span>
+          <span class="card-tag" style="color:#e94560;border-color:rgba(233,69,96,0.3);background:rgba(233,69,96,0.08);">Réactions</span>
+          <span class="card-tag" style="color:#e94560;border-color:rgba(233,69,96,0.3);background:rgba(233,69,96,0.08);">Passé composé</span>
+          <span class="card-tag" style="color:#e94560;border-color:rgba(233,69,96,0.3);background:rgba(233,69,96,0.08);">Futur</span>
+        </div>
+        <div class="card-cta">
+          <span class="cta-text" style="color:#e94560;">Commencer le cours →</span>
+          <div class="cta-arrow" style="background:rgba(233,69,96,0.15);color:#e94560;">→</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- COMING SOON -->
+  <div class="coming-soon">
+    <p class="coming-soon-label">Prochains cours — bientôt disponibles</p>
+    <div class="coming-soon-grid">
+      <div class="soon-item">
+        <div class="soon-num">Topic 3</div>
+        <div class="soon-title">Poésie & Expression émotionnelle</div>
+        <div class="soon-lock">🔒 À venir</div>
+      </div>
+      <div class="soon-item">
+        <div class="soon-num">Topic 4</div>
+        <div class="soon-title">Société & Opinions</div>
+        <div class="soon-lock">🔒 À venir</div>
+      </div>
+      <div class="soon-item">
+        <div class="soon-num">Topic 5</div>
+        <div class="soon-title">Voyage & Culture francophone</div>
+        <div class="soon-lock">🔒 À venir</div>
+      </div>
+      <div class="soon-item">
+        <div class="soon-num">Topic 6</div>
+        <div class="soon-title">Médias & Technologie</div>
+        <div class="soon-lock">🔒 À venir</div>
+      </div>
+      <div class="soon-item">
+        <div class="soon-num">Topic 7</div>
+        <div class="soon-title">Littérature & Expression avancée</div>
+        <div class="soon-lock">🔒 À venir</div>
+      </div>
+      <div class="soon-item">
+        <div class="soon-num">Topic 8</div>
+        <div class="soon-title">Fluency & Assessment final</div>
+        <div class="soon-lock">🔒 À venir</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Cours créé avec ❤️ par <span>Fily</span> · Superprof · 2025
+  </div>
+
+</div>
+</body>
+</html>

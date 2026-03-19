@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours de Français — Topic 2: La Conversation Naturelle</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0a0a0f; color: #f0ece4; font-family: 'Source Sans 3', sans-serif; }
+  #root { min-height: 100vh; }
+  button { cursor: pointer; font-family: 'Source Sans 3', sans-serif; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const sections = [
+  {
+    id: "intro", emoji: "💬", title: "Objectif du jour",
+    intro: {
+      fr: "Aujourd'hui, tu vas apprendre à maintenir une conversation naturelle en français.",
+      en: "Today, you'll learn how to keep a conversation going naturally in French.",
+      goals: [
+        "Use fillers & reaction words like a native",
+        "Ask follow-up questions instinctively",
+        "Talk about routines, opinions, past events & future plans",
+        "Sound natural — not like a textbook!",
+      ],
+    },
+  },
+  {
+    id: "fillers", emoji: "🗣️", title: "Les mots de liaison",
+    categories: [
+      {
+        label: "⏸️ Buying time (while you think)", color: "#e94560",
+        items: [
+          { fr: "Euh…", en: "Uh… / Hmm…" },
+          { fr: "Voyons voir…", en: "Let me see…" },
+          { fr: "Comment dire…", en: "How to say it…" },
+          { fr: "C'est-à-dire…", en: "I mean… / That is to say…" },
+          { fr: "En fait…", en: "Actually… / Well…" },
+          { fr: "Bon…", en: "Well… / OK so…" },
+        ],
+      },
+      {
+        label: "😮 Reactions (showing interest)", color: "#f5a623",
+        items: [
+          { fr: "Ah bon ?", en: "Oh really?" },
+          { fr: "C'est vrai ?", en: "Is that true? / Really?" },
+          { fr: "Vraiment ?", en: "Really? / Seriously?" },
+          { fr: "Pas possible !", en: "No way!" },
+          { fr: "C'est sympa !", en: "That's nice!" },
+          { fr: "Incroyable !", en: "Incredible!" },
+          { fr: "Oh là là !", en: "Oh wow! / Oh no!" },
+          { fr: "C'est dommage.", en: "That's a shame." },
+        ],
+      },
+      {
+        label: "🔄 Keeping it going (asking more)", color: "#4ecdc4",
+        items: [
+          { fr: "Et toi ?", en: "And you?" },
+          { fr: "C'était comment ?", en: "How was it?" },
+          { fr: "Tu as aimé ?", en: "Did you like it?" },
+          { fr: "Pourquoi tu penses ça ?", en: "Why do you think that?" },
+          { fr: "Et ensuite ?", en: "And then what?" },
+          { fr: "Raconte-moi !", en: "Tell me more!" },
+          { fr: "Tu fais ça souvent ?", en: "Do you do that often?" },
+          { fr: "Depuis quand ?", en: "Since when?" },
+        ],
+      },
+      {
+        label: "✅ Agreeing & disagreeing", color: "#a8e6cf",
+        items: [
+          { fr: "Tout à fait !", en: "Absolutely! / Exactly!" },
+          { fr: "C'est exactement ça.", en: "That's exactly it." },
+          { fr: "Je suis d'accord.", en: "I agree." },
+          { fr: "Pas forcément…", en: "Not necessarily…" },
+          { fr: "Je ne suis pas sûre…", en: "I'm not sure…" },
+          { fr: "Ça dépend.", en: "It depends." },
+          { fr: "Pas vraiment.", en: "Not really." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "themes", emoji: "🌍", title: "4 Thèmes",
+    themes: [
+      {
+        icon: "☀️", title: "La vie quotidienne", subtitle: "Daily life & routines", tense: "Présent", color: "#e94560",
+        phrases: [
+          { fr: "En ce moment, je…", en: "Right now, I…" },
+          { fr: "D'habitude, je me lève à…", en: "Usually, I wake up at…" },
+          { fr: "Ma journée commence par…", en: "My day starts with…" },
+          { fr: "Je travaille / j'étudie…", en: "I work / I study…" },
+          { fr: "Le soir, j'ai l'habitude de…", en: "In the evenings, I usually…" },
+        ],
+        followUps: ["C'est comment ta routine du matin ?", "Tu travailles de chez toi ?", "Tu te couches à quelle heure ?"],
+      },
+      {
+        icon: "💭", title: "Les opinions & préférences", subtitle: "What you think & like", tense: "Présent", color: "#f5a623",
+        phrases: [
+          { fr: "Je pense que…", en: "I think that…" },
+          { fr: "À mon avis…", en: "In my opinion…" },
+          { fr: "J'adore / Je déteste…", en: "I love / I hate…" },
+          { fr: "Ce que j'aime le plus, c'est…", en: "What I like most is…" },
+          { fr: "Je préfère… parce que…", en: "I prefer… because…" },
+          { fr: "Ça me plaît / ça ne me plaît pas.", en: "I like it / I don't like it." },
+        ],
+        followUps: ["Pourquoi tu penses ça ?", "Tu as toujours aimé ça ?", "Et toi, tu préfères quoi ?"],
+      },
+      {
+        icon: "📖", title: "Raconter le passé", subtitle: "Storytelling — past events", tense: "Passé composé", color: "#4ecdc4",
+        phrases: [
+          { fr: "Le week-end dernier, j'ai…", en: "Last weekend, I…" },
+          { fr: "Hier soir, je suis allé(e)…", en: "Last night, I went…" },
+          { fr: "La semaine passée, j'ai décidé de…", en: "Last week, I decided to…" },
+          { fr: "C'était vraiment…", en: "It was really…" },
+          { fr: "J'ai rencontré quelqu'un qui…", en: "I met someone who…" },
+          { fr: "Au début… mais ensuite…", en: "At first… but then…" },
+        ],
+        followUps: ["C'était comment ?", "Tu y es allé(e) avec qui ?", "Et ensuite, qu'est-ce qui s'est passé ?"],
+      },
+      {
+        icon: "🚀", title: "Les projets & rêves", subtitle: "Future plans & dreams", tense: "Futur / Aller + infinitif", color: "#c77dff",
+        phrases: [
+          { fr: "L'année prochaine, je vais…", en: "Next year, I'm going to…" },
+          { fr: "Je voudrais / J'aimerais…", en: "I would like…" },
+          { fr: "Mon rêve, c'est de…", en: "My dream is to…" },
+          { fr: "Dans cinq ans, je serai…", en: "In five years, I will be…" },
+          { fr: "Je compte / Je prévois de…", en: "I plan to…" },
+          { fr: "Si j'ai l'occasion, je…", en: "If I get the chance, I…" },
+        ],
+        followUps: ["C'est pour quand ?", "Qu'est-ce qui t'a donné cette idée ?", "Tu es prête pour ça ?"],
+      },
+    ],
+  },
+  {
+    id: "exercise1", emoji: "🎯", title: "Exercice 1",
+    instructions: {
+      what: "The teacher says a sentence. The student must: (1) react with a filler/reaction word, (2) ask ONE follow-up question.",
+      model: {
+        teacher: "Ce week-end, je suis allée au marché.",
+        student: "Ah bon ? C'était comment ? Tu as trouvé des bonnes choses ?",
+        note: "React + follow-up = natural conversation!",
+      },
+    },
+    prompts: [
+      { fr: "Hier soir, j'ai regardé un film incroyable.", tag: "Passé" },
+      { fr: "Je vais changer de travail l'année prochaine.", tag: "Futur" },
+      { fr: "Je me lève tous les jours à 5h du matin.", tag: "Routine" },
+      { fr: "Je déteste cuisiner, en fait.", tag: "Opinion" },
+      { fr: "La semaine dernière, j'ai eu une mauvaise journée.", tag: "Passé" },
+      { fr: "Mon rêve, c'est de vivre à l'étranger.", tag: "Futur" },
+    ],
+  },
+  {
+    id: "exercise2", emoji: "🎲", title: "Exercice 2",
+    instructions: "Choose one scenario. Have a conversation for 3 minutes minimum. Use at least 3 reaction words and ask 2 follow-up questions.",
+    scenarios: [
+      {
+        icon: "☕", title: "Café rencontre", en: "Coffee meeting",
+        context: "You bump into an acquaintance at a café. Talk about your week, what you've been up to, and your weekend plans.",
+        vocab: ["D'habitude…", "Ce week-end, j'ai…", "Je vais…", "Ah bon ?", "C'était comment ?"],
+      },
+      {
+        icon: "📱", title: "Appel téléphonique", en: "Phone call",
+        context: "A friend calls to catch up. Talk about what happened last week, your current life, and your upcoming projects.",
+        vocab: ["La semaine dernière…", "En ce moment…", "Je compte…", "Vraiment ?", "Et ensuite ?"],
+      },
+      {
+        icon: "🎓", title: "Entretien informel", en: "Informal interview",
+        context: "Someone asks you about yourself: your personality, what you love, your goals and dreams.",
+        vocab: ["À mon avis…", "Ce que j'aime, c'est…", "Mon rêve c'est de…", "Je pense que…", "Pas forcément…"],
+      },
+    ],
+  },
+  {
+    id: "exercise3", emoji: "✍️", title: "Exercice 3",
+    instructions: "Transform these short sentences into a natural 2–3 sentence response. Use fillers, reactions, connectors, and follow-up questions.",
+    items: [
+      { basic: "J'ai mangé.", hint: "Passé composé + opinion + detail" },
+      { basic: "Je veux voyager.", hint: "Futur + raison + rêve" },
+      { basic: "Ma semaine était bien.", hint: "Passé + détail + Et toi ?" },
+      { basic: "Je suis fatiguée.", hint: "Explication + routine + connecteur" },
+      { basic: "J'aime les films.", hint: "Opinion + genre + expérience passée" },
+    ],
+  },
+  {
+    id: "homework", emoji: "🏠", title: "À la maison",
+    tasks: [
+      { title: "Journal de 10 phrases", desc: "Write 10 sentences about your week — at least 2 per theme (routine, opinion, past, future). Use at least 5 reaction/filler words.", due: "Before next class" },
+      { title: "Enregistre-toi !", desc: "Record yourself for 2 minutes answering: 'Raconte-moi ta semaine.' Try to speak naturally, use fillers, and avoid long silences.", due: "Optional but recommended" },
+    ],
+    bonusvocab: [
+      { fr: "D'ailleurs…", en: "By the way… / Also…" },
+      { fr: "En tout cas…", en: "In any case… / Anyway…" },
+      { fr: "Tu sais quoi ?", en: "You know what?" },
+      { fr: "Franchement…", en: "Honestly… / Frankly…" },
+      { fr: "Je t'avoue que…", en: "I'll be honest with you…" },
+      { fr: "Sans blague ?", en: "No kidding? / Seriously?" },
+    ],
+  },
+];
+
+const tagColors = { Passé: "#4ecdc4", Futur: "#c77dff", Routine: "#e94560", Opinion: "#f5a623" };
+
+function App() {
+  const [activeSection, setActiveSection] = React.useState("intro");
+  const [flipped, setFlipped] = React.useState({});
+  const [expanded, setExpanded] = React.useState({});
+
+  const toggleFlip = (id) => setFlipped(p => ({ ...p, [id]: !p[id] }));
+  const toggleExpand = (id) => setExpanded(p => ({ ...p, [id]: !p[id] }));
+  const current = sections.find(s => s.id === activeSection);
+
+  return (
+    <div style={{ fontFamily: "'Source Sans 3', sans-serif", background: "#0a0a0f", minHeight: "100vh", color: "#f0ece4" }}>
+
+      {/* HEADER */}
+      <div style={{ background: "linear-gradient(135deg,#1a0a2e,#0a0a1e 50%,#1a1a0a)", padding: "1.5rem 2rem", borderBottom: "1px solid #222", position: "sticky", top: 0, zIndex: 100 }}>
+        <div style={{ maxWidth: 960, margin: "0 auto" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}>
+            <span style={{ fontSize: "2rem" }}>🇫🇷</span>
+            <div>
+              <h1 style={{ margin: 0, fontSize: "1.3rem", fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>Cours de Français</h1>
+              <p style={{ margin: 0, fontSize: "0.8rem", color: "#888", fontStyle: "italic" }}>Topic 2 · La conversation naturelle</p>
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+            {sections.map(s => (
+              <button key={s.id} onClick={() => setActiveSection(s.id)} style={{
+                background: activeSection === s.id ? "#e94560" : "rgba(255,255,255,0.05)",
+                border: `1px solid ${activeSection === s.id ? "#e94560" : "#333"}`,
+                color: activeSection === s.id ? "#fff" : "#aaa",
+                padding: "0.3rem 0.7rem", borderRadius: "20px", fontSize: "0.78rem", transition: "all 0.2s"
+              }}>{s.emoji} {s.title}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* MAIN */}
+      <div style={{ maxWidth: 960, margin: "0 auto", padding: "2rem 1.5rem" }}>
+
+        {/* INTRO */}
+        {activeSection === "intro" && (
+          <div>
+            <h2 style={{ fontSize: "2rem", color: "#e94560", fontFamily: "'Playfair Display', serif", marginBottom: "0.5rem" }}>💬 Objectif du jour</h2>
+            <div style={{ background: "rgba(233,69,96,0.1)", border: "1px solid #e94560", borderRadius: "12px", padding: "1.5rem", marginBottom: "2rem" }}>
+              <p style={{ fontSize: "1.1rem", lineHeight: 1.8, marginBottom: "0.5rem" }}>{current.intro.fr}</p>
+              <p style={{ color: "#888", fontStyle: "italic", fontSize: "0.95rem" }}>{current.intro.en}</p>
+            </div>
+            <h3 style={{ color: "#f5a623", marginBottom: "1rem" }}>Today you'll learn to:</h3>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+              {current.intro.goals.map((g, i) => (
+                <div key={i} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid #222", borderRadius: "10px", padding: "1rem", display: "flex", gap: "0.75rem" }}>
+                  <span style={{ color: "#e94560" }}>✦</span>
+                  <span style={{ color: "#ccc", fontSize: "0.95rem", lineHeight: 1.5 }}>{g}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* FILLERS */}
+        {activeSection === "fillers" && (
+          <div>
+            <h2 style={{ fontSize: "2rem", color: "#4ecdc4", fontFamily: "'Playfair Display', serif", marginBottom: "0.5rem" }}>🗣️ Les mots de liaison</h2>
+            <p style={{ color: "#888", marginBottom: "2rem", fontStyle: "italic" }}>Click any card to reveal the English translation</p>
+            {current.categories.map((cat, ci) => (
+              <div key={ci} style={{ marginBottom: "2rem" }}>
+                <h3 style={{ color: cat.color, marginBottom: "1rem", fontSize: "0.95rem", letterSpacing: "0.05em" }}>{cat.label}</h3>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(190px,1fr))", gap: "0.75rem" }}>
+                  {cat.items.map((item, ii) => {
+                    const k = `${ci}-${ii}`;
+                    return (
+                      <div key={k} onClick={() => toggleFlip(k)} style={{
+                        background: flipped[k] ? `${cat.color}22` : "rgba(255,255,255,0.04)",
+                        border: `1px solid ${flipped[k] ? cat.color : "#222"}`,
+                        borderRadius: "10px", padding: "1rem", cursor: "pointer", transition: "all 0.2s", minHeight: "60px"
+                      }}>
+                        <div style={{ fontWeight: 700, color: cat.color, fontSize: "1rem" }}>{item.fr}</div>
+                        {flipped[k] && <div style={{ fontSize: "0.85rem", color: "#ccc", marginTop: "0.25rem", fontStyle: "italic" }}>{item.en}</div>}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* THEMES */}
+        {activeSection === "themes" && (
+          <div>
+            <h2 style={{ fontSize: "2rem", color: "#f5a623", fontFamily: "'Playfair Display', serif", marginBottom: "0.5rem" }}>🌍 4 Thèmes de conversation</h2>
+            <p style={{ color: "#888", marginBottom: "2rem", fontStyle: "italic" }}>Click each theme to expand phrases & follow-up questions</p>
+            {current.themes.map((theme, ti) => (
+              <div key={ti} style={{ marginBottom: "1rem" }}>
+                <div onClick={() => toggleExpand(`t${ti}`)} style={{
+                  background: expanded[`t${ti}`] ? `${theme.color}18` : "rgba(255,255,255,0.04)",
+                  border: `1px solid ${expanded[`t${ti}`] ? theme.color : "#222"}`,
+                  borderRadius: expanded[`t${ti}`] ? "12px 12px 0 0" : "12px",
+                  padding: "1.25rem 1.5rem", cursor: "pointer",
+                  display: "flex", justifyContent: "space-between", alignItems: "center", transition: "all 0.2s"
+                }}>
+                  <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+                    <span style={{ fontSize: "1.8rem" }}>{theme.icon}</span>
+                    <div>
+                      <div style={{ fontWeight: 700, color: theme.color, fontSize: "1.1rem" }}>{theme.title}</div>
+                      <div style={{ color: "#888", fontSize: "0.85rem" }}>{theme.subtitle} · <span style={{ color: theme.color }}>{theme.tense}</span></div>
+                    </div>
+                  </div>
+                  <span style={{ color: theme.color }}>{expanded[`t${ti}`] ? "▲" : "▼"}</span>
+                </div>
+                {expanded[`t${ti}`] && (
+                  <div style={{ border: `1px solid ${theme.color}44`, borderTop: "none", borderRadius: "0 0 12px 12px", padding: "1.5rem", background: `${theme.color}08` }}>
+                    <div style={{ marginBottom: "1.5rem" }}>
+                      <h4 style={{ color: theme.color, margin: "0 0 0.75rem", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em" }}>Phrases clés</h4>
+                      {theme.phrases.map((p, pi) => (
+                        <div key={pi} style={{ display: "flex", gap: "1rem", marginBottom: "0.4rem", alignItems: "baseline" }}>
+                          <span style={{ color: theme.color }}>›</span>
+                          <span style={{ fontWeight: 600 }}>{p.fr}</span>
+                          <span style={{ color: "#666", fontStyle: "italic", fontSize: "0.85rem" }}>{p.en}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div>
+                      <h4 style={{ color: "#888", margin: "0 0 0.75rem", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em" }}>Questions de relance 🔄</h4>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                        {theme.followUps.map((q, qi) => (
+                          <span key={qi} style={{ background: `${theme.color}22`, border: `1px solid ${theme.color}44`, color: theme.color, borderRadius: "20px", padding: "0.3rem 0.75rem", fontSize: "0.85rem" }}>{q}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* EXERCISE 1 */}
+        {activeSection === "exercise1" && (
+          <div>
+            <h2 style={{ fontSize: "2rem", color: "#e94560", fontFamily: "'Playfair Display', serif", marginBottom: "0.5rem" }}>🎯 Exercice 1 — Réaction Chain</h2>
+            <div style={{ background: "rgba(233,69,96,0.1)", border: "1px solid #e94560", borderRadius: "12px", padding: "1.5rem", marginBottom: "2rem" }}>
+              <p style={{ color: "#ccc", marginBottom: "1rem" }}><strong style={{ color: "#e94560" }}>Instructions:</strong> {current.instructions.what}</p>
+              <div style={{ background: "rgba(0,0,0,0.3)", borderRadius: "8px", padding: "1rem" }}>
+                <p style={{ color: "#888", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.5rem" }}>Modèle</p>
+                <p style={{ marginBottom: "0.25rem" }}><strong style={{ color: "#f5a623" }}>Teacher:</strong> {current.instructions.model.teacher}</p>
+                <p style={{ marginBottom: "0.5rem" }}><strong style={{ color: "#4ecdc4" }}>Student:</strong> {current.instructions.model.student}</p>
+                <p style={{ color: "#666", fontStyle: "italic", fontSize: "0.85rem" }}>{current.instructions.model.note}</p>
+              </div>
+            </div>
+            <div style={{ display: "grid", gap: "0.75rem" }}>
+              {current.prompts.map((prompt, pi) => (
+                <div key={pi} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid #222", borderRadius: "12px", padding: "1.25rem 1.5rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+                    <span style={{ color: "#444", fontWeight: 700, minWidth: "24px" }}>{pi + 1}.</span>
+                    <span style={{ fontSize: "1.05rem" }}>{prompt.fr}</span>
+                  </div>
+                  <span style={{ background: `${tagColors[prompt.tag]}22`, border: `1px solid ${tagColors[prompt.tag]}66`, color: tagColors[prompt.tag], borderRadius: "12px", padding: "0.2rem 0.6rem", fontSize: "0.75rem", whiteSpace: "nowrap", marginLeft: "1rem" }}>{prompt.tag}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* EXERCISE 2 */}
+        {activeSection === "exercise2" && (
+          <div>
+            <h2 style={{ fontSize: "2rem", color: "#4ecdc4", fontFamily: "'Playfair Display', serif", marginBottom: "0.5rem" }}>🎲 Exercice 2 — Mini-conversation</h2>
+            <p style={{ color: "#888", marginBottom: "2rem", fontStyle: "italic" }}>{current.instructions}</p>
+            <div style={{ display: "grid", gap: "1.25rem" }}>
+              {current.scenarios.map((s, si) => (
+                <div key={si} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid #2a2a3a", borderRadius: "14px", padding: "1.5rem" }}>
+                  <div style={{ display: "flex", gap: "1rem", alignItems: "center", marginBottom: "1rem" }}>
+                    <span style={{ fontSize: "2rem" }}>{s.icon}</span>
+                    <div>
+                      <div style={{ fontWeight: 700, fontSize: "1.1rem" }}>{s.title}</div>
+                      <div style={{ color: "#888", fontSize: "0.85rem", fontStyle: "italic" }}>{s.en}</div>
+                    </div>
+                  </div>
+                  <p style={{ color: "#ccc", lineHeight: 1.7, marginBottom: "1rem", fontSize: "0.95rem" }}>{s.context}</p>
+                  <p style={{ color: "#888", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.5rem" }}>Vocabulaire suggéré</p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                    {s.vocab.map((v, vi) => (
+                      <span key={vi} style={{ background: "rgba(78,205,196,0.1)", border: "1px solid rgba(78,205,196,0.3)", color: "#4ecdc4", borderRadius: "20px", padding: "0.3rem 0.75rem", fontSize: "0.85rem" }}>{v}</span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* EXERCISE 3 */}
+        {activeSection === "exercise3" && (
+          <div>
+            <h2 style={{ fontSize: "2rem", color: "#f5a623", fontFamily: "'Playfair Display', serif", marginBottom: "0.5rem" }}>✍️ Exercice 3 — Reformulation</h2>
+            <p style={{ color: "#888", marginBottom: "2rem", fontStyle: "italic" }}>{current.instructions}</p>
+            <div style={{ display: "grid", gap: "1rem" }}>
+              {current.items.map((item, ii) => (
+                <div key={ii} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid #222", borderRadius: "12px", padding: "1.25rem 1.5rem" }}>
+                  <div style={{ display: "flex", gap: "1rem" }}>
+                    <span style={{ color: "#e94560", fontWeight: 700, fontSize: "1.2rem", minWidth: "24px" }}>{ii + 1}.</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ background: "rgba(233,69,96,0.1)", border: "1px solid rgba(233,69,96,0.3)", borderRadius: "8px", padding: "0.75rem 1rem", marginBottom: "0.75rem" }}>
+                        <span style={{ color: "#aaa", fontSize: "0.8rem" }}>Version simple → </span>
+                        <span style={{ fontWeight: 600, fontSize: "1.05rem" }}>{item.basic}</span>
+                      </div>
+                      <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", marginBottom: "0.75rem" }}>
+                        <span style={{ color: "#f5a623", fontSize: "0.8rem" }}>💡 Hint:</span>
+                        <span style={{ color: "#888", fontSize: "0.85rem", fontStyle: "italic" }}>{item.hint}</span>
+                      </div>
+                      <div style={{ background: "rgba(255,255,255,0.03)", border: "1px dashed #333", borderRadius: "8px", padding: "0.75rem 1rem", minHeight: "44px" }}>
+                        <span style={{ color: "#444", fontSize: "0.85rem", fontStyle: "italic" }}>Ta reformulation ici…</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* HOMEWORK */}
+        {activeSection === "homework" && (
+          <div>
+            <h2 style={{ fontSize: "2rem", color: "#c77dff", fontFamily: "'Playfair Display', serif", marginBottom: "0.5rem" }}>🏠 Exercice à la maison</h2>
+            <p style={{ color: "#888", marginBottom: "2rem", fontStyle: "italic" }}>To prepare for the next class</p>
+            <div style={{ display: "grid", gap: "1.25rem", marginBottom: "2.5rem" }}>
+              {current.tasks.map((task, ti) => (
+                <div key={ti} style={{ background: "rgba(199,125,255,0.08)", border: "1px solid rgba(199,125,255,0.3)", borderRadius: "14px", padding: "1.5rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.75rem" }}>
+                    <h3 style={{ color: "#c77dff", fontSize: "1.05rem" }}>{task.title}</h3>
+                    <span style={{ background: "rgba(199,125,255,0.2)", color: "#c77dff", borderRadius: "12px", padding: "0.2rem 0.6rem", fontSize: "0.75rem", whiteSpace: "nowrap", marginLeft: "1rem" }}>{task.due}</span>
+                  </div>
+                  <p style={{ color: "#ccc", lineHeight: 1.7, fontSize: "0.95rem" }}>{task.desc}</p>
+                </div>
+              ))}
+            </div>
+            <h3 style={{ color: "#f5a623", marginBottom: "1rem" }}>🌟 Bonus Vocabulary — niveau avancé</h3>
+            <p style={{ color: "#888", marginBottom: "1rem", fontSize: "0.85rem", fontStyle: "italic" }}>Click to reveal English</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: "0.75rem" }}>
+              {current.bonusvocab.map((v, vi) => (
+                <div key={vi} onClick={() => toggleFlip(`bonus-${vi}`)} style={{
+                  background: flipped[`bonus-${vi}`] ? "rgba(245,166,35,0.1)" : "rgba(255,255,255,0.03)",
+                  border: `1px solid ${flipped[`bonus-${vi}`] ? "#f5a623" : "#222"}`,
+                  borderRadius: "10px", padding: "1rem", cursor: "pointer", transition: "all 0.2s"
+                }}>
+                  <div style={{ fontWeight: 700, color: "#f5a623" }}>{v.fr}</div>
+                  {flipped[`bonus-${vi}`] && <div style={{ color: "#ccc", fontSize: "0.85rem", marginTop: "0.25rem", fontStyle: "italic" }}>{v.en}</div>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(React.createElement(App), document.getElementById("root"));
+</script>
+</body>
+</html>
