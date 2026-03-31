@@ -213,6 +213,7 @@ function App() {
   const [activeSection, setActiveSection] = React.useState("intro");
   const [flipped, setFlipped] = React.useState({});
   const [expanded, setExpanded] = React.useState({});
+  const [reformAnswers, setReformAnswers] = React.useState({});
 
   const toggleFlip = (id) => setFlipped(p => ({ ...p, [id]: !p[id] }));
   const toggleExpand = (id) => setExpanded(p => ({ ...p, [id]: !p[id] }));
@@ -404,28 +405,43 @@ function App() {
         {activeSection === "exercise3" && (
           <div>
             <h2 style={{ fontSize: "2rem", color: "#f5a623", fontFamily: "'Playfair Display', serif", marginBottom: "0.5rem" }}>✍️ Exercice 3 — Reformulation</h2>
-            <p style={{ color: "#888", marginBottom: "2rem", fontStyle: "italic" }}>{current.instructions}</p>
+            <p style={{ color: "#888", marginBottom: "1rem", fontStyle: "italic" }}>{current.instructions}</p>
+            <div style={{ background: "rgba(245,166,35,0.08)", border: "1px solid rgba(245,166,35,0.25)", borderRadius: "10px", padding: "1rem 1.25rem", marginBottom: "1.75rem" }}>
+              <p style={{ color: "#888", fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.5rem" }}>Modèle</p>
+              <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+                <span style={{ background: "rgba(233,69,96,0.15)", border: "1px solid rgba(233,69,96,0.35)", color: "#e94560", borderRadius: "8px", padding: "0.35rem 0.75rem", fontSize: "0.9rem" }}>Je suis timide.</span>
+                <span style={{ color: "#555" }}>→</span>
+                <span style={{ background: "rgba(78,205,196,0.12)", border: "1px solid rgba(78,205,196,0.35)", color: "#4ecdc4", borderRadius: "8px", padding: "0.35rem 0.75rem", fontSize: "0.9rem" }}>Je suis réservée, mais je prends confiance en moi progressivement.</span>
+              </div>
+            </div>
             <div style={{ display: "grid", gap: "1rem" }}>
-              {current.items.map((item, ii) => (
-                <div key={ii} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid #222", borderRadius: "12px", padding: "1.25rem 1.5rem" }}>
-                  <div style={{ display: "flex", gap: "1rem" }}>
-                    <span style={{ color: "#e94560", fontWeight: 700, fontSize: "1.2rem", minWidth: "24px" }}>{ii + 1}.</span>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ background: "rgba(233,69,96,0.1)", border: "1px solid rgba(233,69,96,0.3)", borderRadius: "8px", padding: "0.75rem 1rem", marginBottom: "0.75rem" }}>
-                        <span style={{ color: "#aaa", fontSize: "0.8rem" }}>Version simple → </span>
-                        <span style={{ fontWeight: 600, fontSize: "1.05rem" }}>{item.basic}</span>
-                      </div>
-                      <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", marginBottom: "0.75rem" }}>
-                        <span style={{ color: "#f5a623", fontSize: "0.8rem" }}>💡 Hint:</span>
-                        <span style={{ color: "#888", fontSize: "0.85rem", fontStyle: "italic" }}>{item.hint}</span>
-                      </div>
-                      <div style={{ background: "rgba(255,255,255,0.03)", border: "1px dashed #333", borderRadius: "8px", padding: "0.75rem 1rem", minHeight: "44px" }}>
-                        <span style={{ color: "#444", fontSize: "0.85rem", fontStyle: "italic" }}>Ta reformulation ici…</span>
+              {current.items.map((item, ii) => {
+                const reformKey = `reform-${ii}`;
+                return (
+                  <div key={ii} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid #222", borderRadius: "12px", padding: "1.25rem 1.5rem" }}>
+                    <div style={{ display: "flex", gap: "1rem" }}>
+                      <span style={{ color: "#f5a623", fontWeight: 700, fontSize: "1.2rem", minWidth: "24px" }}>{ii + 1}.</span>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ background: "rgba(233,69,96,0.1)", border: "1px solid rgba(233,69,96,0.3)", borderRadius: "8px", padding: "0.75rem 1rem", marginBottom: "0.6rem" }}>
+                          <span style={{ color: "#aaa", fontSize: "0.8rem" }}>Version simple → </span>
+                          <span style={{ fontWeight: 600, fontSize: "1.05rem" }}>{item.basic}</span>
+                        </div>
+                        <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", marginBottom: "0.65rem" }}>
+                          <span style={{ color: "#f5a623", fontSize: "0.8rem" }}>💡 Hint:</span>
+                          <span style={{ color: "#888", fontSize: "0.85rem", fontStyle: "italic" }}>{item.hint}</span>
+                        </div>
+                        <textarea
+                          value={reformAnswers[reformKey] || ""}
+                          onChange={e => setReformAnswers(p => ({ ...p, [reformKey]: e.target.value }))}
+                          placeholder="Ta reformulation ici…"
+                          rows={2}
+                          style={{ width: "100%", background: "rgba(0,0,0,0.3)", border: "1px solid #333", borderRadius: "8px", padding: "0.65rem 0.9rem", color: "#f0ece4", fontSize: "0.9rem", outline: "none", resize: "vertical", fontFamily: "'Source Sans 3', sans-serif" }}
+                        />
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

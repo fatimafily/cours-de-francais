@@ -553,12 +553,217 @@ function HomeworkSection() {
   );
 }
 
+// ─── GRAMMAR PLUS: PASSÉ COMPOSÉ + FUTUR ──────────────────────
+
+const passeCompose = [
+  {
+    group: "1er Groupe — radical + é/ée", color: "#4caf7d",
+    aux: "avoir",
+    tip: "Le présent est pour une action habituelle ou en cours. Le passé composé est pour une action avec un début et une fin précise dans le passé.",
+    model: { verb: "aimer → aimé(e)", aux: "avoir", forms: ["j'ai aimé","tu as aimé","il/elle a aimé","nous avons aimé","vous avez aimé","ils/elles ont aimé"] },
+  },
+  {
+    group: "2ème Groupe — radical + i/ie", color: "#f5a623",
+    aux: "être",
+    tip: "Avec être, le participe passé s'accorde avec le sujet. Ex: elle est partie / ils sont partis.",
+    model: { verb: "partir → parti(e)", aux: "être", forms: ["je suis parti(e)","tu es parti(e)","il/elle est parti(e)","nous sommes partis","vous êtes partis","ils/elles sont partis(ies)"] },
+  },
+  {
+    group: "3ème Groupe — irréguliers", color: "#e94560",
+    aux: "avoir ou être",
+    tip: "Ces participes passés sont irréguliers — il faut les mémoriser !",
+    models: [
+      { verb: "prendre → pris", aux: "avoir", forms: ["j'ai pris","tu as pris","il/elle a pris","nous avons pris","vous avez pris","ils/elles ont pris"] },
+      { verb: "aller → allé(e)", aux: "être", forms: ["je suis allé(e)","tu es allé(e)","il/elle est allé(e)","nous sommes allés","vous êtes allés","ils/elles sont allés(ées)"] },
+    ],
+    extra: [
+      { verb: "partir", pp: "parti(e)", aux: "être", ex: "Les garçons sont partis au terrain." },
+      { verb: "arriver", pp: "arrivé(e)", aux: "être", ex: "Je suis arrivée à la maison." },
+      { verb: "être", pp: "été", aux: "avoir", ex: "" },
+      { verb: "avoir", pp: "eu", aux: "avoir", ex: "" },
+      { verb: "entendre", pp: "entendu", aux: "avoir", ex: "" },
+      { verb: "parler", pp: "parlé", aux: "avoir", ex: "" },
+      { verb: "manger", pp: "mangé", aux: "avoir", ex: "" },
+      { verb: "cuisiner", pp: "cuisiné", aux: "avoir", ex: "" },
+      { verb: "dormir", pp: "dormi", aux: "avoir", ex: "" },
+      { verb: "faire", pp: "fait", aux: "avoir", ex: "" },
+    ],
+  },
+];
+
+const futurVerbs = [
+  { verb: "arriver", forms: ["j'arriverai","tu arriveras","il/elle arrivera","nous arriverons","vous arriverez","ils/elles arriveront"] },
+  { verb: "finir", forms: ["je finirai","tu finiras","il/elle finira","nous finirons","vous finirez","ils/elles finiront"] },
+  { verb: "prendre", forms: ["je prendrai","tu prendras","il/elle prendra","nous prendrons","vous prendrez","ils/elles prendront"] },
+  { verb: "aller (irrég.)", forms: ["j'irai","tu iras","il/elle ira","nous irons","vous irez","ils/elles iront"] },
+];
+
+function GrammarPlus() {
+  const [expanded, setExpanded] = useState({});
+  const [futurExpanded, setFuturExpanded] = useState(false);
+  const [answers, setAnswers] = useState({});
+
+  return (
+    <div>
+      <h2 style={{ fontSize: "1.8rem", color: "#7ec8e3", fontFamily: "'Playfair Display', serif", marginBottom: "0.25rem" }}>⏳ Passé composé & Futur</h2>
+      <p style={{ color: "#888", marginBottom: "0.5rem", fontStyle: "italic" }}>Grammar extension — tenses beyond the present</p>
+
+      {/* PRÉSENT vs PASSÉ explainer */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginBottom: "2rem" }}>
+        <div style={{ background: "rgba(76,175,125,0.08)", border: "1px solid rgba(76,175,125,0.3)", borderRadius: "12px", padding: "1rem 1.25rem" }}>
+          <div style={{ fontWeight: 700, color: "#4caf7d", marginBottom: "0.4rem", fontSize: "0.9rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Le Présent</div>
+          <p style={{ color: "#ccc", fontSize: "0.88rem", lineHeight: 1.6 }}>Used for an action happening <strong>right now</strong>, or a <strong>habitual / repeated</strong> action.</p>
+          <p style={{ color: "#888", fontSize: "0.82rem", fontStyle: "italic", marginTop: "0.4rem" }}>Ex: Je mange tous les jours à midi.</p>
+        </div>
+        <div style={{ background: "rgba(126,200,227,0.08)", border: "1px solid rgba(126,200,227,0.3)", borderRadius: "12px", padding: "1rem 1.25rem" }}>
+          <div style={{ fontWeight: 700, color: "#7ec8e3", marginBottom: "0.4rem", fontSize: "0.9rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Le Passé Composé</div>
+          <p style={{ color: "#ccc", fontSize: "0.88rem", lineHeight: 1.6 }}>Used for an action with a <strong>clear beginning and end</strong> in the past.</p>
+          <p style={{ color: "#888", fontSize: "0.82rem", fontStyle: "italic", marginTop: "0.4rem" }}>Ex: Hier, j'ai mangé une pizza.</p>
+        </div>
+      </div>
+
+      {/* FORMULA */}
+      <div style={{ background: "rgba(126,200,227,0.06)", border: "1px solid rgba(126,200,227,0.2)", borderRadius: "12px", padding: "1.1rem 1.5rem", marginBottom: "2rem", textAlign: "center" }}>
+        <p style={{ color: "#888", fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: "0.5rem" }}>La formule</p>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+          <span style={{ background: "rgba(76,175,125,0.15)", border: "1px solid rgba(76,175,125,0.4)", borderRadius: "8px", padding: "0.4rem 0.9rem", color: "#4caf7d", fontWeight: 700 }}>AVOIR ou ÊTRE</span>
+          <span style={{ color: "#555", fontSize: "1.2rem" }}>+</span>
+          <span style={{ background: "rgba(126,200,227,0.15)", border: "1px solid rgba(126,200,227,0.4)", borderRadius: "8px", padding: "0.4rem 0.9rem", color: "#7ec8e3", fontWeight: 700 }}>Participe passé</span>
+          <span style={{ color: "#555" }}>conjugués au présent</span>
+        </div>
+      </div>
+
+      {/* PASSÉ COMPOSÉ GROUPS */}
+      <h3 style={{ color: "#7ec8e3", marginBottom: "1rem", fontSize: "1rem", textTransform: "uppercase", letterSpacing: "0.08em" }}>Le Participe passé par groupe</h3>
+      {passeCompose.map((g, gi) => (
+        <div key={gi} style={{ marginBottom: "1rem" }}>
+          <div onClick={() => setExpanded(p => ({ ...p, [`pc${gi}`]: !p[`pc${gi}`] }))} style={{
+            background: expanded[`pc${gi}`] ? `${g.color}18` : "rgba(255,255,255,0.04)",
+            border: `1px solid ${expanded[`pc${gi}`] ? g.color : "#222"}`,
+            borderRadius: expanded[`pc${gi}`] ? "12px 12px 0 0" : "12px",
+            padding: "1rem 1.5rem", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "all 0.2s"
+          }}>
+            <div>
+              <div style={{ fontWeight: 700, color: g.color, fontSize: "1rem" }}>{g.group}</div>
+              <div style={{ color: "#666", fontSize: "0.82rem", marginTop: "0.15rem" }}>Auxiliaire : <span style={{ color: g.color }}>{g.aux}</span></div>
+            </div>
+            <span style={{ color: g.color }}>{expanded[`pc${gi}`] ? "▲" : "▼"}</span>
+          </div>
+          {expanded[`pc${gi}`] && (
+            <div style={{ border: `1px solid ${g.color}44`, borderTop: "none", borderRadius: "0 0 12px 12px", padding: "1.5rem", background: `${g.color}08` }}>
+              <div style={{ background: `${g.color}15`, border: `1px solid ${g.color}33`, borderRadius: "8px", padding: "0.65rem 1rem", marginBottom: "1.25rem", fontSize: "0.88rem", color: "#ccc" }}>
+                💡 {g.tip}
+              </div>
+              {g.model && <VerbTable verb={g.model.verb} forms={g.model.forms} color={g.color} />}
+              {g.models && (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: "1rem", marginBottom: "1.25rem" }}>
+                  {g.models.map((m, mi) => <VerbTable key={mi} verb={m.verb} forms={m.forms} color={g.color} />)}
+                </div>
+              )}
+              {g.extra && (
+                <div style={{ marginTop: "1.25rem" }}>
+                  <p style={{ color: "#888", fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.75rem" }}>Autres verbes importants</p>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: "0.5rem" }}>
+                    {g.extra.map((v, vi) => (
+                      <div key={vi} style={{ background: "rgba(0,0,0,0.25)", border: "1px solid #1a1a1a", borderRadius: "8px", padding: "0.6rem 0.9rem" }}>
+                        <span style={{ color: g.color, fontWeight: 700, fontSize: "0.88rem" }}>{v.verb}</span>
+                        <span style={{ color: "#666", fontSize: "0.8rem" }}> → {v.pp}</span>
+                        <span style={{ background: v.aux === "être" ? "rgba(126,200,227,0.15)" : "rgba(76,175,125,0.15)", color: v.aux === "être" ? "#7ec8e3" : "#4caf7d", fontSize: "0.7rem", borderRadius: "10px", padding: "0.1rem 0.4rem", marginLeft: "0.4rem" }}>{v.aux}</span>
+                        {v.ex && <p style={{ color: "#666", fontSize: "0.78rem", fontStyle: "italic", marginTop: "0.25rem" }}>{v.ex}</p>}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      ))}
+
+      {/* FUTUR */}
+      <div style={{ marginTop: "2.5rem", marginBottom: "1rem" }}>
+        <div onClick={() => setFuturExpanded(p => !p)} style={{
+          background: futurExpanded ? "rgba(199,125,255,0.12)" : "rgba(255,255,255,0.04)",
+          border: `1px solid ${futurExpanded ? "#c77dff" : "#222"}`,
+          borderRadius: futurExpanded ? "12px 12px 0 0" : "12px",
+          padding: "1rem 1.5rem", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "all 0.2s"
+        }}>
+          <div>
+            <div style={{ fontWeight: 700, color: "#c77dff", fontSize: "1.05rem" }}>🚀 Le Futur Simple</div>
+            <div style={{ color: "#888", fontSize: "0.82rem", marginTop: "0.15rem" }}>Terminaisons : <span style={{ color: "#c77dff" }}>ai · as · a · ons · ez · ont</span></div>
+          </div>
+          <span style={{ color: "#c77dff" }}>{futurExpanded ? "▲" : "▼"}</span>
+        </div>
+        {futurExpanded && (
+          <div style={{ border: "1px solid rgba(199,125,255,0.3)", borderTop: "none", borderRadius: "0 0 12px 12px", padding: "1.5rem", background: "rgba(199,125,255,0.05)" }}>
+            <div style={{ background: "rgba(199,125,255,0.1)", border: "1px solid rgba(199,125,255,0.25)", borderRadius: "8px", padding: "0.65rem 1rem", marginBottom: "1.25rem", fontSize: "0.88rem", color: "#ccc" }}>
+              💡 Le futur = <strong style={{ color: "#c77dff" }}>verbe à l'infinitif + terminaisons</strong>. Sauf pour les verbes irréguliers comme <em>aller → j'irai</em>.
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: "1rem", marginBottom: "1.5rem" }}>
+              {futurVerbs.map((v, vi) => <VerbTable key={vi} verb={v.verb} forms={v.forms} color="#c77dff" />)}
+            </div>
+            <div>
+              <p style={{ color: "#888", fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.75rem" }}>✏️ Practice — Conjugue au futur</p>
+              {["partir", "prendre"].map((verb, vi) => (
+                <div key={vi} style={{ marginBottom: "1rem" }}>
+                  <p style={{ color: "#c77dff", fontWeight: 700, marginBottom: "0.5rem" }}>{verb}</p>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.4rem" }}>
+                    {pronouns.map((pr, pi) => (
+                      <div key={pi} style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "rgba(0,0,0,0.2)", borderRadius: "6px", padding: "0.4rem 0.75rem" }}>
+                        <span style={{ color: "#666", fontSize: "0.8rem", minWidth: "70px" }}>{pr}</span>
+                        <input
+                          value={answers[`fut-${vi}-${pi}`] || ""}
+                          onChange={e => setAnswers(p => ({ ...p, [`fut-${vi}-${pi}`]: e.target.value }))}
+                          placeholder="…"
+                          style={{ background: "transparent", border: "none", borderBottom: "1px solid rgba(199,125,255,0.3)", color: "#f0ece4", fontSize: "0.9rem", outline: "none", flex: 1, padding: "0.1rem 0.2rem" }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* PASSÉ COMPOSÉ EXERCISES */}
+      <div style={{ marginTop: "2.5rem" }}>
+        <h3 style={{ color: "#7ec8e3", marginBottom: "1rem" }}>✏️ Exercices — Passé composé</h3>
+        <p style={{ color: "#888", fontSize: "0.88rem", marginBottom: "1.25rem", fontStyle: "italic" }}>Answer in a full sentence using the passé composé.</p>
+        {[
+          { q: "Qu'est-ce que vous avez mangé hier soir ?", hint: "manger → mangé (avoir)" },
+          { q: "Vous avez parlé à quelqu'un cette semaine ?", hint: "parler → parlé (avoir)" },
+          { q: "Vous êtes allée quelque part le week-end dernier ?", hint: "aller → allé(e) (être)" },
+          { q: "Vous avez dormi combien d'heures hier ?", hint: "dormir → dormi (avoir)" },
+        ].map((item, ii) => (
+          <div key={ii} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid #1a2a2a", borderRadius: "10px", padding: "1rem 1.25rem", marginBottom: "0.75rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.5rem" }}>
+              <p style={{ fontWeight: 600, color: "#f0ece4", flex: 1 }}>{item.q}</p>
+              <span style={{ background: "rgba(126,200,227,0.1)", border: "1px solid rgba(126,200,227,0.25)", color: "#7ec8e3", borderRadius: "10px", padding: "0.2rem 0.6rem", fontSize: "0.72rem", marginLeft: "0.75rem", whiteSpace: "nowrap" }}>{item.hint}</span>
+            </div>
+            <textarea
+              value={answers[`pc-ex-${ii}`] || ""}
+              onChange={e => setAnswers(p => ({ ...p, [`pc-ex-${ii}`]: e.target.value }))}
+              placeholder="Ta réponse…"
+              rows={2}
+              style={{ width: "100%", background: "rgba(0,0,0,0.3)", border: "1px solid #222", borderRadius: "6px", padding: "0.5rem 0.75rem", color: "#f0ece4", fontSize: "0.9rem", outline: "none" }}
+            />
+          </div>
+        ))}
+      </div>
+
+    </div>
+  );
+}
+
 // ─── PAGES ────────────────────────────────────────────────────
 
 const pages = [
   { id: "syllabus", emoji: "📚", label: "Syllabus" },
   { id: "vocab", emoji: "📖", label: "Vocabulaire" },
   { id: "grammar", emoji: "📐", label: "Grammaire" },
+  { id: "grammarplus", emoji: "⏳", label: "Passé & Futur" },
   { id: "exercises", emoji: "✏️", label: "Exercices" },
   { id: "homework", emoji: "🏠", label: "À la maison" },
 ];
@@ -673,6 +878,9 @@ function App() {
             <VerbSection />
           </div>
         )}
+
+        {/* PASSÉ & FUTUR */}
+        {page === "grammarplus" && <GrammarPlus />}
 
         {/* EXERCISES */}
         {page === "exercises" && (
